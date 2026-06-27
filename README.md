@@ -21,6 +21,7 @@ This approach is inspired by the [Karabiner-Elements Vim Mode Plus mod](https://
   - [A) Standard keyboard (e.g. laptop builtin)](#a-standard-keyboard-eg-laptop-builtin)
   - [B) Minimal passthrough keyboard (e.g. external keyboard)](#b-minimal-passthrough-keyboard-eg-external-keyboard)
 - [Visualize active vim mode](#visualize-active-vim-mode)
+- [Supported Vim movements and actions](#supported-vim-movements-and-actions)
 
 ## What the plugin contains
 
@@ -241,3 +242,44 @@ Luckily the kanata TCP port allows to build simple integrations with external to
 For example, refer to [`examples/waybar-kanata-vim-status.sh`](./examples/waybar-kanata-vim-status.sh) for a simple integration with Linux Waybar.
 
 (A more simple approach is to activate `CAPS` mode while vim layers are active - this shows a small caps-indicator on some OSes.)
+
+## Supported Vim movements and actions
+
+| Key / Combo | Action | Normal | Visual | Visual-line |
+| --- | --- | --- | --- | --- |
+| `h`, `j`, `k`, `l` | Move/select left down up right | ✅ | ✅ | ✅ |
+| `b` | Move/select to start of word | ✅ | ✅ |  |
+| `w` | Move/select to end of word | ✅ | ✅ |  |
+| `0` | Move/select to start of line | ✅ | ✅ |  |
+| `gg` | Go/select to start of document | ✅ | ✅ | ✅ |
+| `G` | Go/select to end of document | ✅ | ✅ | ✅ |
+| `i`, `a` | Enter insert mode | ✅ |  |  |
+| `I` | Insert at start of line | ✅ |  |  |
+| `A` | Append at end of line | ✅ |  |  |
+| `o` | Open line above  | ✅ |  |  |
+| `O` | Open line below  | ✅ |  |  |
+| `x` | Delete selection/character | ✅ | ✅ | ✅ |
+| `X` | Delete previous character | ✅ |  |  |
+| `d` | Delete selection |  | ✅ | ✅ |
+| `dd` | Delete line | ✅ |  |  |
+| `D` | Delete to end of line | ✅ |  |  |
+| `diw`, `daw` | Delete word | ✅ |  |  |
+| `cc` | Change line  | ✅ |  |  |
+| `C` | Change to end of line  | ✅ |  |  |
+| `ciw`, `caw` | Change inner word  | ✅ |  |  |
+| `y` | Yank/copy selection |  | ✅ | ✅ |
+| `yy` | Yank/copy line | ✅ |  |  |
+| `Y` | Yank/copy to end of line | ✅ |  |  |
+| `yiw`, `yaw` | Yank/copy word | ✅ |  |  |
+| `v` | Enter visual mode | ✅ |  |  |
+| `V` | Enter visual-line mode | ✅ |  |  |
+| `viw`, `vaw` | Select word | ✅ |  |  |
+| `p` | Paste | ✅ | ✅ | ✅ |
+| `P` | Paste above  | ✅ | ✅ | ✅ |
+| `r` | Replace one character | ✅ |  |  |
+| `u` | Undo | ✅ |  |  |
+| `C-r` | Redo | ✅ |  |  |
+| `C-d` | Half-page down | ✅ |  |  |
+| `C-u` | Half-page up | ✅ |  |  |
+| `.` | Repeat last action (limited support) | ✅ |  |  |
+| `Esc` | Exit to normal / insert mode | ✅ | ✅ | ✅ |
