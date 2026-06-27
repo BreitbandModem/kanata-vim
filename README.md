@@ -256,8 +256,8 @@ For example, refer to [`examples/waybar-kanata-vim-status.sh`](./examples/waybar
 | `i`, `a` | Enter insert mode | ✅ |  |  |
 | `I` | Insert at start of line | ✅ |  |  |
 | `A` | Append at end of line | ✅ |  |  |
-| `o` | Open line above  | ✅ |  |  |
-| `O` | Open line below  | ✅ |  |  |
+| `o` | Open line below  | ✅ |  |  |
+| `O` | Open line above  | ✅ |  |  |
 | `x` | Delete selection/character | ✅ | ✅ | ✅ |
 | `X` | Delete previous character | ✅ |  |  |
 | `d` | Delete selection |  | ✅ | ✅ |
