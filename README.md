@@ -2,22 +2,36 @@
 
 This project is a reusable Vim-mode "plugin" for [kanata](https://github.com/jtroo/kanata/tree/main).
 It provides mode switching and common Vim-like editing motions/actions on top of a custom kanata keymap.
-Essentially, this brings vim like text manipulation to any application and operating system!
+Essentially, this brings Vim-like text manipulation to any application and operating system.
 
 This works by introducing extra kanata layers where the keys are mapped to OS native keyboard shortcuts to navigate text.
 So switching to the vim normal layer, the h j k l keys are now remapped to the arrow keys, w is mapped to Alt-Right, and so on.
 This approach is inspired by the [Karabiner-Elements Vim Mode Plus mod](https://ke-complex-modifications.pqrs.org/#vim_mode_plus).
 
+## Table of contents
+
+- [What the plugin contains](#what-the-plugin-contains)
+- [Inner workings (mode model)](#inner-workings-mode-model)
+- [How to integrate in your kanata keymap](#how-to-integrate-in-your-kanata-keymap)
+  - [1) Optional `defcfg` requirements](#1-optional-defcfg-requirements)
+  - [2) Layers you must define](#2-layers-you-must-define)
+  - [3) Map a Vim entrypoint from insert mode](#3-map-a-vim-entrypoint-from-insert-mode)
+  - [4) Leverage the override layers to tailor to a custom keymap](#4-leverage-the-override-layers-to-tailor-to-a-custom-keymap)
+- [Minimal setups](#minimal-setups)
+  - [A) Standard keyboard (e.g. laptop builtin)](#a-standard-keyboard-eg-laptop-builtin)
+  - [B) Minimal passthrough keyboard (e.g. external keyboard)](#b-minimal-passthrough-keyboard-eg-external-keyboard)
+- [Visualize active vim mode](#visualize-active-vim-mode)
+
 ## What the plugin contains
 
 The "plugin" consists of a collection of kanata `.kbd` config files that you can include in your kanata configuration.
 
-- `1-interface.kbd`: OS-specific primitive actions (`@left`, `@end-of-word`, `@copy`, `@undo`, ...). This is the only place that should use raw OS key combos.
-- `2-shared.kbd`: higher-level combos/macros (`@delete-word`, `@copy-line`, `@paste`, `@replace`, ...).
-- `3-bootstrapping.kbd`: mode state machine and entrypoint templates.
-- `4-normal-layer.kbd`: Vim normal mode keymap.
-- `5-visual-layer.kbd`: Vim visual mode keymap.
-- `6-visual-line-layer.kbd`: Vim visual-line mode keymap.
+- [`1-interface.kbd`](./1-interface.kbd): OS-specific primitive actions (`@left`, `@end-of-word`, `@copy`, `@undo`, ...). This is the only place that should use raw OS key combos.
+- [`2-shared.kbd`](./2-shared.kbd): higher-level combos/macros (`@delete-word`, `@copy-line`, `@paste`, `@replace`, ...).
+- [`3-bootstrapping.kbd`](./3-bootstrapping.kbd): mode state machine and entrypoint templates.
+- [`4-normal-layer.kbd`](./4-normal-layer.kbd): Vim normal mode keymap.
+- [`5-visual-layer.kbd`](./5-visual-layer.kbd): Vim visual mode keymap.
+- [`6-visual-line-layer.kbd`](./6-visual-line-layer.kbd): Vim visual-line mode keymap.
 
 ## Inner workings (mode model)
 
@@ -80,7 +94,7 @@ Example empty scaffolding:
 In the examples below, the vim entrypoint is mapped to `esc`.
 But of course you can map it to any key instead of `esc`, such as `caps` etc.
 
-#### Simple Setup
+#### Simple setup
 
 Map any key to the switch-vim-normal alias:
 
@@ -98,7 +112,7 @@ Or get creative in how to enter vim mode. E.g. by double tap on escape:
 )
 ```
 
-#### Application Aware Setup
+#### Application-aware setup
 
 It can be very nice to have a different vim mode trigger depending on the currently used app.
 E.g. in the terminal I need my `escape` key to behave normally (for actual vim use).
@@ -118,7 +132,7 @@ Behavior:
 - if virtual key `vim-direct-enter` is active, always enters `vim-normal` on tap `esc`
 
 This only makes sense in conjunction with an external script that toggles the `vim-direct-enter` virtual key based on the active app.
-For an example script that works with hyprland on linux, refer to window-listener.sh
+For an example script that works with Hyprland on Linux, refer to [`examples/hypr-window-listener.sh`](./examples/hypr-window-listener.sh).
 
 ### 4) Leverage the override layers to tailor to a custom keymap
 
@@ -127,7 +141,7 @@ E.g. in normal mode layer, the "j" key is mapped to the down arrow key.
 If you're using homerow mods, you most likely want to map a long tap of "j" to the shift key.
 Or maybe you're using `caps` as `escape` key and want to use it to exit normal mode.
 
-This can easily be achieved by using the override layers without touching the vim layer implemtnation.
+This can easily be achieved by using the override layers without touching the Vim layer implementation.
 Here are some simple examples (same principle applies to all override layers):
 
 ```kbd
@@ -187,7 +201,7 @@ Here are some simple examples (same principle applies to all override layers):
 )
 ```
 
-### B) Minimal passthrough keyboard ( e.g. external keybaord)
+### B) Minimal passthrough keyboard (e.g. external keyboard)
 
 Good for external keyboards with custom firmware (such as QMK or ZMK).
 In this case, kanata is only used to enable the vim mode for this keyboard.
@@ -224,6 +238,6 @@ In this case, kanata is only used to enable the vim mode for this keyboard.
 
 It can be very confusing to use this plugin without a way to see which vim mode is currently active.
 Luckily the kanata TCP port allows to build simple integrations with external tools.
-For example, refer to the `examples/waybar-kanata-vim-status.sh` script for a simple integration with linux waybar.
+For example, refer to [`examples/waybar-kanata-vim-status.sh`](./examples/waybar-kanata-vim-status.sh) for a simple integration with Linux Waybar.
 
 (A more simple approach is to activate `CAPS` mode while vim layers are active - this shows a small caps-indicator on some OSes.)
