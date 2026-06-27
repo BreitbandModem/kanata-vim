@@ -1,0 +1,47 @@
+;; ----------------
+;; vim visual layer
+;; ----------------
+;;
+(deflayermap (vim-visual)
+  esc   (multi @deselect @switch-vim-normal)
+  h     @select-left
+  j     @select-down
+  k     @select-up
+  l     @select-right
+  lft   @select-left
+  down  @select-down
+  up    @select-up
+  rght  @select-right
+  b     @select-start-of-word
+  w     (switch
+          ((input-history real i 2))
+            @select-word                ;; combo ([v] iw)
+            break
+          ()
+            @select-end-of-word         ;; aka ([v] w)
+            break
+        )
+  0     @select-start-of-line
+  g     (tap-dance 200
+          ((t! action-shift XX
+            @select-end-of-page)        ;; shift  tap (G)
+          @select-start-of-page))       ;; double tap (gg)
+  c     (multi @cut @line-paste-off @switch-insert)
+  d     (multi @cut @line-paste-off @switch-vim-normal)
+  x     (multi @cut @line-paste-off @switch-vim-normal)
+  p     (multi @paste @switch-vim-normal)
+  y     (multi (macro @copy @deselect) @line-paste-off @switch-vim-normal)
+
+  ;; loop modifiers to the vim layer
+  rctl  rctl
+  lctl  lctl
+  lmet  lmet
+  rmet  rmet
+  lalt  lalt
+  ralt  ralt
+  lsft  lsft
+  rsft  rsft
+
+  ;; deactivate any other key presses
+  ___   XX
+)

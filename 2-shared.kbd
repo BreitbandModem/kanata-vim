@@ -1,0 +1,46 @@
+;; ------------
+;; Combos
+;; ------------
+;;
+;; Exposes complex movements and actions.
+;;
+(defvirtualkeys line-paste ()) ;; using this internally to mark a copy buffer as line buffer (relevant for @paste action)
+(defalias
+  line-paste-on         (on-press press-vkey   line-paste)
+  line-paste-off        (on-press release-vkey line-paste)
+
+  select-word           (macro @end-of-word @select-start-of-word)
+  delete-word           (macro @end-of-word @select-start-of-word @cut  @line-paste-off)
+  copy-word             (macro @end-of-word @select-start-of-word @copy @line-paste-off @end-of-word)
+
+  new-line-below        (macro @end-of-line   @linefeed)
+  paste-line-below      (macro @end-of-line   @linefeed @raw-paste)
+  new-line-above        (macro @start-of-line @linefeed @up)
+  paste-line-above      (macro @start-of-line @linefeed @up @raw-paste)
+
+  delete-end-of-line    (macro @select-end-of-line @cut  @line-paste-off)
+  copy-end-of-line      (macro @select-end-of-line @copy @line-paste-off @end-of-line)
+
+  select-line           (macro @start-of-line @select-end-of-line)
+  change-line           (macro @start-of-line @select-end-of-line @cut  @line-paste-on)
+  delete-line           (macro @start-of-line @select-end-of-line @cut  @line-paste-on @delete-left)  ;; delete-left to completely delete the [empty] line
+  copy-line             (macro @start-of-line @select-end-of-line @copy @line-paste-on @deselect)
+
+  half-page-up          (macro @up   @up   @up   @up   @up   @up   @up   @up   @up   @up)
+  half-page-down        (macro @down @down @down @down @down @down @down @down @down @down)
+
+  replace               (multi
+                          @delete
+                          (one-shot-release-pcancel 1000 (layer-while-held insert)))   ;; known bug: replacing with "r" / "R" does not deactivate the insert layer
+
+  paste                 (switch
+                          ((input virtual line-paste))
+                            (fork 
+                              @paste-line-below
+                              @paste-line-above
+                              (sft))
+                              break
+                          ()
+                            @raw-paste
+                            break)
+)

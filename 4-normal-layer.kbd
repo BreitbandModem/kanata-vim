@@ -1,0 +1,156 @@
+;; ----------------
+;; vim normal layer
+;; ----------------
+;;
+
+(defvirtualkeys mark-seq-end ()) ;; use this internally to mark a vim sequence as completed to make sure it's only triggered again after full sequence is typed (e.g. for dd)
+(deflayermap (vim-normal)
+  v     (t! action-shift
+          @switch-vim-visual                      ;;       tap (v)
+          @switch-vim-visual-line)                ;; shift tap (S-v)
+  up    @up
+  down  @down
+  lft   @left
+  rght  @right
+  h     @left
+  j     @down
+  k     @up
+  l     @right
+  b     @start-of-word
+  e     @end-of-word
+  w     (switch
+          ((and
+            (input-history real c 3)
+            (or 
+              (input-history real i 2)
+              (input-history real a 2))))
+                (multi @delete-word @switch-insert) ;; combo (ciw, caw)
+                break
+          ((and
+            (input-history real d 3)
+            (or 
+              (input-history real i 2)
+              (input-history real a 2))))
+                @delete-word                      ;; combo (diw, daw)
+                break
+          ((and
+            (input-history real y 3)
+            (or 
+              (input-history real i 2)
+              (input-history real a 2))))
+                @copy-word                        ;; combo (yiw, yaw)
+                break
+          ()
+            @end-of-word                          ;; tap   (w)
+            break
+        )
+  i     (switch
+          ((or
+            (input-history real c 2)              ;; pending combo (ci)
+            (input-history real y 2)              ;; pending combo (yi)
+            (input-history real d 2)))            ;; pending combo (di)
+              XX
+              break
+          (lsft rsft)
+            (multi @start-of-line @switch-insert) ;; shift tap     (S-i)
+            break
+          ()
+            @switch-insert                        ;; tap           (i)
+            break
+        )
+  a     (switch
+          ((or
+            (input-history real c 2)              ;; pending combo (ca)
+            (input-history real y 2)              ;; pending combo (ya)
+            (input-history real d 2)))            ;; pending combo (da)
+              XX
+              break
+          (lsft rsft)
+            (multi @end-of-line @switch-insert)   ;; shift tap     (S-a)
+            break
+          ()
+            @switch-insert                        ;; tap           (a)
+            break
+        )
+  d     (switch
+          (lctl rctl)
+            @half-page-down                       ;; ctrl tap      (C-d)
+            break
+          ((and
+            (input-history real d 2)
+            (not (input-history virtual mark-seq-end 1))))  ;; avoid immediate activation on repeated tap (e.g. on triple-tap ddd)
+              (multi
+                @delete-line                      ;; double tap    (dd)
+                (on-press tap-vkey mark-seq-end)) ;; mark sequence completed
+              break
+          (lsft rsft)
+            (multi @delete-end-of-line)           ;; shift tap     (S-d)
+            break
+        )
+  c     (switch
+          ((input-history real c 2))
+            (multi @change-line @switch-insert)         ;; double tap (cc)
+            break
+          (lsft rsft)
+            (multi @delete-end-of-line @switch-insert)  ;; shift tap  (S-c)
+            break
+        )
+  y     (switch
+          ((and
+            (input-history real y 2)
+            (not (input-history virtual mark-seq-end 1))))  ;; avoid immediate activation on repeated tap (e.g. on triple-tap ddd)
+              (multi
+                @copy-line                        ;; double tap (yy)
+                (on-press tap-vkey mark-seq-end)) ;; mark sequence completed
+              break
+          (lsft rsft)
+            (multi @copy-end-of-line)             ;; shift  tap (S-y)
+            break
+        )
+  g     (tap-dance 200
+          ((t! action-shift XX
+            @end-of-page)                         ;; shift  tap (G)
+            @start-of-page))                      ;; double tap (gg)
+  0     @start-of-line
+  r     (t! action-ctl
+          @replace                                ;;      tap (r)
+          @redo)                                  ;; Ctrl tap (C-r)
+  x     (t! action-shift
+          @delete                                 ;;       tap (x)
+          @delete-left)                           ;; shift tap (S-x)
+  o     (multi
+          (t! action-shift
+            @new-line-below                       ;; shift tap (S-o)
+            @new-line-above)                      ;;       tap (o)
+          @switch-insert)
+  p     @paste
+  u     (t! action-ctl
+          @undo                                   ;;      tap (u)
+          @half-page-up)                          ;; Ctrl tap (C-u)
+  .     rpt-any                                   ;; repeat last action - only works for a few bindings
+  del   @delete
+
+  ;; loop modifiers to the vim layer
+  rctl  rctl
+  lctl  lctl
+  lmet  lmet
+  rmet  rmet
+  lalt  lalt
+  ralt  ralt
+  lsft  lsft
+  rsft  rsft
+
+  ;; deactivate any other key presses
+  ___   XX
+)
+
+;; perform action or if shift is active, shift-action
+(deftemplate action-shift (action shift-action)
+  (fork $action $shift-action (rsft lsft))
+)
+
+;; perform action or if ctl is active, ctl-action
+(deftemplate action-ctl (action ctl-action)
+  (fork $action $ctl-action (lctl rctl))
+)
+

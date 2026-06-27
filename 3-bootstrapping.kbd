@@ -1,0 +1,58 @@
+;; ------------
+;; Switch Vim Modes
+;; ------------
+;;
+;; Takes care of switching between vim modes:
+;; - insert
+;; - normal
+;; - visual
+;; - visual-line
+;;
+;; When entering one of these modes,
+;; - we switch to the <vim-mode> layer
+;; - we activate the corresponding overlay layer (<vim-mode>-override)
+;; - mode specific actions are executed (e.g. select line when entering visual-line mode)
+;;
+(deftemplate switch- (target-layer non-layer1 non-layer2 non-layer3 action)
+  (defvirtualkeys (concat layer-switch-   $target-layer) (layer-switch     $target-layer))
+  (defvirtualkeys (concat override-layer- $target-layer) (layer-while-held (concat $target-layer -override)))
+  (defalias (concat switch- $target-layer)
+    (multi
+      $action
+      (macro
+        (on-press release-vkey (concat override-layer- $non-layer1))
+        (on-press release-vkey (concat override-layer- $non-layer2))
+        (on-press release-vkey (concat override-layer- $non-layer3))
+        (on-press tap-vkey     (concat layer-switch-   $target-layer))
+        (on-press press-vkey   (concat override-layer- $target-layer))
+      )
+    )
+  )
+)
+(t! switch- insert             vim-normal vim-visual vim-visual-line   @line-paste-off)
+(t! switch- vim-normal         vim-visual vim-visual-line insert       nop0)
+(t! switch- vim-visual         vim-normal vim-visual-line insert       nop0)
+(t! switch- vim-visual-line    vim-normal vim-visual insert            @select-line)
+
+;; ------------
+;; Enter Vim (normal mode)
+;; ------------
+;;
+;; Helper template for application aware activation of vim mode.
+;; $modifier        -> if this key is pressed, enter vim mode
+;; vim-direct-enter -> if this virtual key is active, immediatedly enter vim mode
+;;
+;; Use a script and the kanata TCP server to toggle the vim-direct-enter layer for certain apps.
+;;
+(defvirtualkeys vim-direct-enter ())
+(deftemplate vim-entrypoint (modifier)
+  (switch
+    ((input virtual vim-direct-enter))          ;; Immediately enter vim mode when virtual key is activated
+      @switch-vim-normal
+      break
+    ()
+      (fork _ @switch-vim-normal ($modifier))   ;; Enter vim mode if modifier is pressed (otherwise fallback to key press)
+      break
+    ;; for some reason, this syntax doesn't seem to work: ((input real $modifier))
+  )
+)

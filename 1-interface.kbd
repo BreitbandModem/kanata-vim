@@ -1,0 +1,137 @@
+;; ------------
+;; OS Bindings
+;; ------------
+;;
+;; Maps atomic movements and actions to the corresponding OS-level shortcuts.
+;; This should be the ONLY place where raw keys are used.
+;; Everything else should build on top of these building blocks.
+
+;; Linux
+(platform (linux)
+  (defalias
+    left                  lft
+    select-left           S-lft
+    start-of-word         (unshift ctl lft)
+    select-start-of-word  S-C-lft
+
+    right                 rght
+    select-right          S-right
+    end-of-word           (unshift ctl rght)
+    select-end-of-word    S-C-rght
+
+    down                  (unmod down)
+    select-down           S-down
+    select-line-below     S-C-down
+
+    up                    (unmod up)
+    select-up             S-up
+    select-line-above     S-C-up
+
+    start-of-line         (unshift home)
+    select-start-of-line  S-home
+    start-of-page         C-home
+    select-start-of-page  S-C-home
+
+    end-of-line           (unshift end)
+    select-end-of-line    S-end
+    end-of-page           (unshift ctl end)
+    select-end-of-page    S-C-end
+
+    deselect              esc
+    linefeed              S-ret    ;; useful for not triggering an "enter" action (e.g. sending in a messenger app)
+    delete                del
+    delete-left           bspc
+    copy                  (unshift rctl c)
+    cut                   (unshift rctl x)
+    raw-paste             (unshift lctl v)  ;; do not use directly, prefer @paste.
+    undo                  C-z
+    redo                  (unmod rsft rctl z)
+  )
+)
+
+;; Windows: Experimental - not tested.
+;; (Almost identical to linux.)
+(platform (win)
+  (defalias
+    left                  lft
+    select-left           S-lft
+    start-of-word         (unshift ctl lft)
+    select-start-of-word  S-C-lft
+
+    right                 rght
+    select-right          S-rght
+    end-of-word           (unshift ctl rght)
+    select-end-of-word    S-C-rght
+
+    down                  (unmod down)
+    select-down           S-down
+    select-line-below     S-C-down
+
+    up                    (unmod up)
+    select-up             S-up
+    select-line-above     S-C-up
+
+    start-of-line         (unshift home)
+    select-start-of-line  S-home
+    start-of-page         C-home
+    select-start-of-page  S-C-home
+
+    end-of-line           (unshift end)
+    select-end-of-line    S-end
+    end-of-page           (unshift ctl end)
+    select-end-of-page    S-C-end
+
+    deselect              esc
+    linefeed              S-ret       ;; useful for not triggering an "enter" action (e.g. sending in a messenger app)
+    delete                del
+    delete-left           bspc
+    copy                  (unshift rctl c)
+    cut                   (unshift rctl x)
+    raw-paste             (unshift lctl v)   ;; do not use directly, prefer @paste.
+    undo                  C-z
+    redo                  C-y
+  )
+)
+
+;; MacOS: Experimental - not tested.
+(platform (macos)
+  (defalias
+    left                  lft
+    select-left           S-lft
+    start-of-word         (unshift alt lft)
+    select-start-of-word  S-A-lft
+
+    right                 rght
+    select-right          S-right
+    end-of-word           (unshift alt rght)
+    select-end-of-word    S-A-rght
+
+    down                  (unmod down)
+    select-down           S-down
+    select-line-below     S-A-down
+
+    up                    (unmod up)
+    select-up             S-up
+    select-line-above     S-A-up
+
+    start-of-line         (unshift met lft)
+    select-start-of-line  S-M-lft
+    start-of-page         M-up
+    select-start-of-page  S-M-up
+
+    end-of-line           (unshift met rght)
+    select-end-of-line    S-M-rght
+    end-of-page           (unshift met down)
+    select-end-of-page    S-M-down
+
+    deselect              esc
+    linefeed              S-ret    ;; useful for not triggering an "enter" action (e.g. sending in a messenger app)
+    delete                del
+    delete-left           bspc
+    copy                  (unshift met c)
+    cut                   (unshift met x)
+    raw-paste             (unshift met v)  ;; do not use directly, prefer @paste.
+    undo                  M-z
+    redo                  (unmod rsft met z)
+  )
+)

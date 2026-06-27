@@ -1,0 +1,56 @@
+;; ---------------------
+;; vim visual-line layer
+;; ---------------------
+;;
+
+;; Depending on if you select upwards or downwards,
+;; the cursor needs to be placed either at the end or the beginning of the current line.
+;; These helpers will reselect the current line before applying the action (if the condition is true).
+;; (The input-history recency is really strange when used here - I'm not sure why.)
+;;
+(deftemplate down (condition action)
+  (switch
+    ($condition)
+      (macro @start-of-line @select-end-of-line $action)
+      break
+    ()
+      $action
+      break
+  )
+)
+(deftemplate up (condition action)
+  (switch
+    ($condition)
+      (macro @end-of-line @select-start-of-line $action)
+      break
+    ()
+      $action
+      break
+  )
+)
+
+
+
+(deflayermap (vim-visual-line)
+  esc   (multi @deselect @switch-vim-normal)
+  p     (multi @paste    @switch-vim-normal)
+  y     (multi (macro @copy @deselect)    @line-paste-on @switch-vim-normal)
+  d     (multi (macro @cut  @delete-left) @line-paste-on @switch-vim-normal)
+  x     (multi (macro @cut  @delete-left) @line-paste-on @switch-vim-normal)
+  c     (multi (macro @cut  @delete-left) @line-paste-on @switch-insert)
+  g     (tap-dance 200
+          ((t! action-shift XX
+            ;; reselect line if selecting to start/end of document after
+            ;; - entering visual line mode
+            ;; - selecting in the opposite direction
+            (t! down (or (input-history real v 5) (input-history real k 3)) @select-end-of-page))     ;; shift  tap (G)
+            (t! up   (or (input-history real v 5) (input-history real j 3)) @select-start-of-page)))  ;; double tap (gg)
+
+  ;; reselect line for first motion after entering visual line mode
+  j     (t! down (input-history real v 4) @select-line-below)
+  k     (t! up   (input-history real v 4) @select-line-above)
+
+  ;; deactivate any other key presses
+  ___   XX
+)
+
