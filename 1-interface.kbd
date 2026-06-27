@@ -28,11 +28,11 @@
     select-line-above     S-C-up
 
     start-of-line         (unshift home)
-    select-start-of-line  S-home
+    select-start-of-line  (unmod sft home)
     start-of-page         C-home
     select-start-of-page  S-C-home
 
-    end-of-line           (unshift end)
+    end-of-line           (unmod end)
     select-end-of-line    S-end
     end-of-page           (unshift ctl end)
     select-end-of-page    S-C-end
@@ -72,11 +72,11 @@
     select-line-above     S-C-up
 
     start-of-line         (unshift home)
-    select-start-of-line  S-home
+    select-start-of-line  (unmod sft home)
     start-of-page         C-home
     select-start-of-page  S-C-home
 
-    end-of-line           (unshift end)
+    end-of-line           (unmod end)
     select-end-of-line    S-end
     end-of-page           (unshift ctl end)
     select-end-of-page    S-C-end
@@ -115,11 +115,11 @@
     select-line-above     S-A-up
 
     start-of-line         (unshift met lft)
-    select-start-of-line  S-M-lft
+    select-start-of-line  (unmod sft met lft)
     start-of-page         M-up
     select-start-of-page  S-M-up
 
-    end-of-line           (unshift met rght)
+    end-of-line           (unmod met rght)
     select-end-of-line    S-M-rght
     end-of-page           (unshift met down)
     select-end-of-page    S-M-down

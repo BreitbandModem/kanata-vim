@@ -28,6 +28,10 @@
 
   half-page-up          (macro @up   @up   @up   @up   @up   @up   @up   @up   @up   @up)
   half-page-down        (macro @down @down @down @down @down @down @down @down @down @down)
+  select-half-page-up   (macro @select-up   @select-up   @select-up   @select-up   @select-up   @select-up   @select-up   @select-up   @select-up   @select-up)
+  select-half-page-down (macro @select-down @select-down @select-down @select-down @select-down @select-down @select-down @select-down @select-down @select-down)
+  select-line-half-page-up   (macro @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above)
+  select-line-half-page-down (macro @select-line-below   @select-line-below   @select-line-below   @select-line-below   @select-line-below   @select-line-below   @select-line-below   @select-line-below   @select-line-below   @select-line-below)
 
   replace               (multi
                           @delete

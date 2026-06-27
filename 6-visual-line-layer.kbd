@@ -35,7 +35,23 @@
   esc   (multi @deselect @switch-vim-normal)
   p     (multi @paste    @switch-vim-normal)
   y     (multi (macro @copy @deselect)    @line-paste-on @switch-vim-normal)
-  d     (multi (macro @cut  @delete-left) @line-paste-on @switch-vim-normal)
+  d     (fork
+          (multi (macro @cut  @delete-left) @line-paste-on @switch-vim-normal)  ;;   d
+          @select-line-half-page-down                                           ;; C-d
+          (lctl rctl))
+  u     (fork
+          XX
+          (switch
+            ((input-history real v 5))
+              ;; macros cannot be nested which is why we have to go verbose on this one.
+              (macro @end-of-line @select-start-of-line @select-line-above    @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above   @select-line-above)
+              break
+            ()
+              @select-line-half-page-up
+              break
+          ) ;; C-u
+          (lctl rctl))
+
   x     (multi (macro @cut  @delete-left) @line-paste-on @switch-vim-normal)
   c     (multi (macro @cut  @delete-left) @line-paste-on @switch-insert)
   g     (tap-dance 200

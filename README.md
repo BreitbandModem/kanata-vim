@@ -279,7 +279,7 @@ For example, refer to [`examples/waybar-kanata-vim-status.sh`](./examples/waybar
 | `r` | Replace one character | ✅ |  |  |
 | `u` | Undo | ✅ |  |  |
 | `C-r` | Redo | ✅ |  |  |
-| `C-d` | Half-page down | ✅ |  |  |
-| `C-u` | Half-page up | ✅ |  |  |
+| `C-d` | Half-page down | ✅ | ✅ |  ✅|
+| `C-u` | Half-page up | ✅ | ✅ | ✅ |
 | `.` | Repeat last action (limited support) | ✅ |  |  |
 | `Esc` | Exit to normal / insert mode | ✅ | ✅ | ✅ |

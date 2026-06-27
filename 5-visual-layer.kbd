@@ -27,7 +27,14 @@
             @select-end-of-page)        ;; shift  tap (G)
           @select-start-of-page))       ;; double tap (gg)
   c     (multi @cut @line-paste-off @switch-insert)
-  d     (multi @cut @line-paste-off @switch-vim-normal)
+  d     (fork
+          (multi @cut @line-paste-off @switch-vim-normal)  ;; tap     (d)
+          @select-half-page-down                           ;; ctl tap (C-d)
+          (lctl rctl))
+  u     (fork
+          XX
+          @select-half-page-up                             ;; ctl tap (C-u)
+          (lctl rctl))
   x     (multi @cut @line-paste-off @switch-vim-normal)
   p     (multi @paste @switch-vim-normal)
   y     (multi (macro @copy @deselect) @line-paste-off @switch-vim-normal)
