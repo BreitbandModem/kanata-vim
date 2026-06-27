@@ -1,0 +1,19 @@
+README.md
+  s_11442310e93ed0::t_d2cea1e7e931db 253-284
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "09bc0ee2d0f06bb5de9fd117baaf606ffae5fa91",
+  "prompts": {},
+  "sessions": {
+    "s_11442310e93ed0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6a0a1b2ffemxPPNBCGlrFfTR",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Matthias Bidlingmeyer <m.bidlingmeyer@laserhub.com>"
+    }
+  }
+}
