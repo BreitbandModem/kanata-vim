@@ -8,6 +8,10 @@ This works by introducing extra kanata layers where the keys are mapped to OS na
 So switching to the vim normal layer, the h j k l keys are now remapped to the arrow keys, w is mapped to Alt-Right, and so on.
 This approach is inspired by the [Karabiner-Elements Vim Mode Plus mod](https://ke-complex-modifications.pqrs.org/#vim_mode_plus).
 
+Demo Video:
+
+https://github.com/user-attachments/assets/1bc56560-3af2-44c2-aabe-bf0b3d1e5285
+
 ## Table of contents
 
 - [What the plugin contains](#what-the-plugin-contains)
