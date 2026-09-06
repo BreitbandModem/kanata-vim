@@ -37,7 +37,6 @@
     end-of-page           (unshift ctl end)
     select-end-of-page    S-C-end
 
-    deselect              esc
     linefeed              S-ret    ;; useful for not triggering an "enter" action (e.g. sending in a messenger app)
     delete                del
     delete-left           bspc
@@ -81,7 +80,6 @@
     end-of-page           (unshift ctl end)
     select-end-of-page    S-C-end
 
-    deselect              esc
     linefeed              S-ret       ;; useful for not triggering an "enter" action (e.g. sending in a messenger app)
     delete                del
     delete-left           bspc
@@ -124,7 +122,6 @@
     end-of-page           (unshift met down)
     select-end-of-page    S-M-down
 
-    deselect              esc
     linefeed              S-ret    ;; useful for not triggering an "enter" action (e.g. sending in a messenger app)
     delete                del
     delete-left           bspc

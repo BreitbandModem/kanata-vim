@@ -9,6 +9,7 @@
   line-paste-on         (on-press press-vkey   line-paste)
   line-paste-off        (on-press release-vkey line-paste)
 
+  deselect              @left  ;; not using esc to avoid side effects
   select-word           (macro @end-of-word @select-start-of-word)
   delete-word           (macro @end-of-word @select-start-of-word @cut  @line-paste-off)
   copy-word             (macro @end-of-word @select-start-of-word @copy @line-paste-off @end-of-word)
