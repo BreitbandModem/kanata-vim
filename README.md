@@ -163,7 +163,7 @@ Behavior:
 - if virtual key `vim-direct-enter` is active, always enters `vim-normal` on tap `esc`
 
 This only makes sense in conjunction with an external script that toggles the `vim-direct-enter` virtual key based on the active app.
-For an example script that works with Hyprland on Linux, refer to [`examples/hypr-window-listener.sh`](./examples/hypr-window-listener.sh).
+For an example script that works with Hyprland on Linux, refer to [`hypr-window-listener.lua`](`./examples/hypr-window-listener.lua`) or [`hypr-window-listener.sh`](./examples/hypr-window-listener.sh).
 
 ### Leverage the override layers to tailor to a custom keymap
 
@@ -241,7 +241,8 @@ Here are some simple examples (same principle applies to all override layers):
 
 It can be very confusing to use this plugin without a way to see which vim mode is currently active.
 Luckily the kanata TCP port allows to build simple integrations with external tools.
-For example, refer to [`examples/waybar-kanata-vim-status.sh`](./examples/waybar-kanata-vim-status.sh) for a simple integration with Linux Waybar.
+For example, refer to [`quickshell-kanata-vim-status`](`./examples/quickshell-kanata-vim-status.qml`) [`waybar-kanata-vim-status.sh`](./examples/waybar-kanata-vim-status.sh) for a simple integration with Linux Quickshell or Waybar.
+Or th
 
 (A more simple approach is to activate `CAPS` mode while vim layers are active - this shows a small caps-indicator on some OSes.)
 
