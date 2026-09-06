@@ -13,6 +13,7 @@
   up    @select-up
   rght  @select-right
   b     @select-start-of-word
+  e     @select-end-of-word
   w     (switch
           ((input-history real i 2))
             @select-word                ;; combo ([v] iw)
@@ -38,6 +39,8 @@
   x     (multi @cut @line-paste-off @switch-vim-normal)
   p     (multi @paste @switch-vim-normal)
   y     (multi (macro @copy @deselect) @line-paste-off @switch-vim-normal)
+  4     (fork _ @select-end-of-line (lsft rsft))           ;; shift 4 ($)
+  -     (fork _ @select-start-of-line (lsft rsft))                ;; shift - (_)
 
   ;; loop modifiers to the vim layer
   rctl  rctl

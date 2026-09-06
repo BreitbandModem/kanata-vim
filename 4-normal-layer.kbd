@@ -136,6 +136,8 @@
           XX
           (macro @select-right tab @deselect)     ;; shift tap (<) -> move indentation left
         )
+  4     (fork _ @end-of-line (lsft rsft))         ;; shift 4 ($)
+  -     (fork _ @start-of-line (lsft rsft))       ;; shift - (_)
 
   ;; loop modifiers to the vim layer
   rctl  rctl
