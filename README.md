@@ -1,36 +1,30 @@
 # Kanata Vim Plugin
 
-This project is a reusable Vim-mode "plugin" for [kanata](https://github.com/jtroo/kanata/tree/main).
-It provides mode switching and common Vim-like editing motions/actions on top of a custom kanata keymap.
-Essentially, this brings Vim-like text manipulation to any application and operating system.
+This project provides a Vim-mode standalone or plugin config for [kanata](https://github.com/jtroo/kanata/tree/main).
+It brings Vim motions, actions, and modes to any text field on any operating system.
 
-This works by introducing extra kanata layers where the keys are mapped to OS native keyboard shortcuts to navigate text.
-So switching to the vim normal layer, the h j k l keys are now remapped to the arrow keys, w is mapped to Alt-Right, and so on.
+This works by introducing extra keyboard layers where keys are mapped to OS native keyboard shortcuts to navigate text.
+As an example, switching to the Vim normal layer, the `h` `j` `k` `l` keys are now mapped to the arrow keys, `w` is mapped to Alt-Right, and so on.
 This approach is inspired by the [Karabiner-Elements Vim Mode Plus mod](https://ke-complex-modifications.pqrs.org/#vim_mode_plus).
 
 Demo Video:
 
 https://github.com/user-attachments/assets/1bc56560-3af2-44c2-aabe-bf0b3d1e5285
 
-## Table of contents
+## Quicklinks
 
-- [What the plugin contains](#what-the-plugin-contains)
-- [Inner workings (mode model)](#inner-workings-mode-model)
+- [About this config](#what-the-plugin-contains)
 - [How to integrate in your kanata keymap](#how-to-integrate-in-your-kanata-keymap)
-  - [1) Optional `defcfg` requirements](#1-optional-defcfg-requirements)
-  - [2) Layers you must define](#2-layers-you-must-define)
-  - [3) Map a Vim entrypoint from insert mode](#3-map-a-vim-entrypoint-from-insert-mode)
-  - [4) Leverage the override layers to tailor to a custom keymap](#4-leverage-the-override-layers-to-tailor-to-a-custom-keymap)
-- [Minimal setups](#minimal-setups)
-  - [A) Standard keyboard (e.g. laptop builtin)](#a-standard-keyboard-eg-laptop-builtin)
-  - [B) Minimal passthrough keyboard (e.g. external keyboard)](#b-minimal-passthrough-keyboard-eg-external-keyboard)
-- [Visualize active vim mode](#visualize-active-vim-mode)
+  - [Standalone mode (Recommended)](standalone-mode-recommended)
+  - [Plugin setup](#plugin-setup)
+- [Visualize vim mode](#visualize-active-vim-mode)
 - [Supported Vim movements and actions](#supported-vim-movements-and-actions)
 
-## What the plugin contains
+## What the config contains
 
 The "plugin" consists of a collection of kanata `.kbd` config files that you can include in your kanata configuration.
 
+- [`vim-standalone.kbd`](./examples/vim-standalone.kbd): A ready to use config for running in standalone mode.
 - [`1-interface.kbd`](./1-interface.kbd): OS-specific primitive actions (`@left`, `@end-of-word`, `@copy`, `@undo`, ...). This is the only place that should use raw OS key combos.
 - [`2-shared.kbd`](./2-shared.kbd): higher-level combos/macros (`@delete-word`, `@copy-line`, `@paste`, `@replace`, ...).
 - [`3-bootstrapping.kbd`](./3-bootstrapping.kbd): mode state machine and entrypoint templates.
@@ -46,6 +40,38 @@ The "plugin" consists of a collection of kanata `.kbd` config files that you can
 
 ## How to integrate in your kanata keymap
 
+There are two options on how to integrate this config into your setup:
+
+  1. Standalone mode -> run a dedicated kanata instance (Recommended)
+  2. Plugin mode     -> add the config to your existing kanata config
+
+### Standalone mode (Recommended)
+
+If you are running on Linux, I'd always recommend this approach.
+On other OSes, this will only work if you have no custom kanata setup.
+
+The idea is to have a dedicated kanata instance running that is solely responsible for handling the Vim modes.
+This kanata instance can be applied to external keyboards (e.g. running on ZMK), but also on top of other kanata instances (Linux only?!).
+
+Simply run a dedicated kanata process with a config similar to the one in [`vim-standalone.kbd`](./examples/vim-standalone.kbd).
+
+To run a kanata on top of another kanata instance, I've found these two ways, which only seem to be supported on Linux:
+
+  1. Via the keyboard name
+    - use `(defcfg linux-output-device-name "my-kanata-instance")` on the first instance to set a unique name
+    - use `(defcfg linux-dev-names-include ("my-kanata-instance"))` on the kanata Vim instance to apply on top of the first kanata instance
+  2. Via the keyboard path
+    - use `kanata --symlink-path /some/path/my-kanata-instance` to start first instance
+    - use `(defcfg linux-dev /some/path/my-kanata-instance)` on the kanata Vim instance to apply on top of the first kanata instance
+
+Running a dedicated kanata instance allows to fully decouple the setup of the Vim config from any custom keymaps.
+So all custom keymap quirks such as homerow mods will simply work out of the box when in Vim mode.
+
+### Plugin setup
+
+This approach injects the Vim config into an existing kanata setup.
+It usually requires a bit more effort to make sure all keybindings work correctly.
+
 Include the vim plugin files in this **strict order at the top** of your keymap.
 
 ```kbd
@@ -59,7 +85,7 @@ Include the vim plugin files in this **strict order at the top** of your keymap.
 
 Then wire your own config.
 
-### 1) Optional `defcfg` requirements
+#### Optional `defcfg` requirements
 
 Minimal plugin-relevant settings (optional):
 
@@ -73,7 +99,7 @@ Minimal plugin-relevant settings (optional):
 - `process-unmapped-keys yes`: lets unmapped keys pass through while Vim layers are active.
 - `alias-to-trigger-on-load switch-insert`: starts Kanata in insert mode.
 
-### 2) Layers you must define
+#### Layers you must define
 
 You need:
 
@@ -94,7 +120,7 @@ Example empty scaffolding:
 (deflayermap (vim-visual-line-override))
 ```
 
-### 3) Map a Vim entrypoint from insert mode
+### Map a Vim entrypoint
 
 In the examples below, the vim entrypoint is mapped to `esc`.
 But of course you can map it to any key instead of `esc`, such as `caps` etc.
@@ -139,7 +165,7 @@ Behavior:
 This only makes sense in conjunction with an external script that toggles the `vim-direct-enter` virtual key based on the active app.
 For an example script that works with Hyprland on Linux, refer to [`examples/hypr-window-listener.sh`](./examples/hypr-window-listener.sh).
 
-### 4) Leverage the override layers to tailor to a custom keymap
+### Leverage the override layers to tailor to a custom keymap
 
 The plugin implementations of the vim layers assume the default vim mappings.
 E.g. in normal mode layer, the "j" key is mapped to the down arrow key.
@@ -159,11 +185,16 @@ Here are some simple examples (same principle applies to all override layers):
 )
 ```
 
-## Minimal setups
-
-### A) Standard keyboard (e.g. laptop builtin)
+## Example plugin config setup
 
 ```kbd
+(include kanata-vim/1-interface.kbd)
+(include kanata-vim/2-shared.kbd)
+(include kanata-vim/3-bootstrapping.kbd)
+(include kanata-vim/4-normal-layer.kbd)
+(include kanata-vim/5-visual-layer.kbd)
+(include kanata-vim/6-visual-line-layer.kbd)
+
 (defcfg
   process-unmapped-keys yes
   alias-to-trigger-on-load switch-insert
@@ -206,39 +237,6 @@ Here are some simple examples (same principle applies to all override layers):
 )
 ```
 
-### B) Minimal passthrough keyboard (e.g. external keyboard)
-
-Good for external keyboards with custom firmware (such as QMK or ZMK).
-In this case, kanata is only used to enable the vim mode for this keyboard.
-
-```kbd
-(defcfg
-  process-unmapped-keys yes
-  alias-to-trigger-on-load switch-insert
-)
-
-(defsrc
-  esc
-)
-
-(deflayermap (insert)
-  esc (t! vim-entrypoint rsft)
-  ___ use-defsrc    ;; needed for the @replace action to work properly
-)
-
-(deflayermap (insert-override))
-
-(deflayermap (vim-normal-override)
-  esc (multi esc @switch-insert)
-  4   (fork _ @end-of-line (lsft rsft))   ;; ZMK will send a shifted 4 when I press the `$` key
-)
-
-(deflayermap (vim-visual-override)
-  4   (fork _ @select-end-of-line (lsft rsft))
-)
-(deflayermap (vim-visual-line-override))
-```
-
 ## Visualize active vim mode
 
 It can be very confusing to use this plugin without a way to see which vim mode is currently active.
@@ -253,8 +251,9 @@ For example, refer to [`examples/waybar-kanata-vim-status.sh`](./examples/waybar
 | --- | --- | --- | --- | --- |
 | `h`, `j`, `k`, `l` | Move/select left down up right | ✅ | ✅ | ✅ |
 | `b` | Move/select to start of word | ✅ | ✅ |  |
-| `w` | Move/select to end of word | ✅ | ✅ |  |
-| `0` | Move/select to start of line | ✅ | ✅ |  |
+| `w`, `e` | Move/select to end of word | ✅ | ✅ |  |
+| `0`, `_` | Move/select to start of line | ✅ | ✅ |  |
+| `$` | Move/select to end of line | ✅ | ✅ |  |
 | `gg` | Go/select to start of document | ✅ | ✅ | ✅ |
 | `G` | Go/select to end of document | ✅ | ✅ | ✅ |
 | `i`, `a` | Enter insert mode | ✅ |  |  |

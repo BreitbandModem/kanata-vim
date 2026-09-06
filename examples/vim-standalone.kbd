@@ -1,0 +1,36 @@
+(include vim/1-interface.kbd)
+(include vim/2-shared.kbd)
+(include vim/3-bootstrapping.kbd)
+(include vim/4-normal-layer.kbd)
+(include vim/5-visual-layer.kbd)
+(include vim/6-visual-line-layer.kbd)
+
+(defcfg
+  process-unmapped-keys yes
+  linux-dev-names-include (
+    "External Keyboard"                   ;; Apply to external keyboards
+    "Corne Keyboard"
+    "kanata-thinkpad"                     ;; Apply to another kanata instance. Requires this in the other kanata config: (defcfg linux-output-device-name "kanata-thinkpad")
+  )
+
+  alias-to-trigger-on-load switch-insert  ;; Always start kanata in insert mode
+)
+
+(defsrc
+  esc                                     ;; typically we're only interested in the key that enters Vim mode
+)
+
+(deflayermap (insert)
+  esc   (t! vim-entrypoint rsft)          ;; define the entrypoint that enters Vim mode (e.g. Shift-Escape)
+  ___   use-defsrc                        ;; needed for the @replace action to work properly
+)
+
+(deflayermap (insert-override))           ;; apply any custom behavior on top
+
+(deflayermap (vim-normal-override)
+  esc   (multi esc @switch-insert)        ;; Exit normal, but also signal the "Escape" key for the outside to use (e.g. qutebrowser)
+)
+
+(deflayermap (vim-visual-override))
+
+(deflayermap (vim-visual-line-override))
