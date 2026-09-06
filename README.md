@@ -1,10 +1,10 @@
 # Kanata Vim Plugin
 
-This project provides a Vim-mode standalone or plugin config for [kanata](https://github.com/jtroo/kanata/tree/main).
+This project provides a Vim-mode standalone or plugin config for [kanata](https://github.com/jtroo/kanata/tree/main).  
 It brings Vim motions, actions, and modes to any text field on any operating system.
 
-This works by introducing extra keyboard layers where keys are mapped to OS native keyboard shortcuts to navigate text.
-As an example, switching to the Vim normal layer, the `h` `j` `k` `l` keys are now mapped to the arrow keys, `w` is mapped to Alt-Right, and so on.
+This works by introducing extra keyboard layers where keys are mapped to OS native keyboard shortcuts to navigate text.  
+As an example, switching to the Vim normal layer, the `h` `j` `k` `l` keys are now mapped to the arrow keys, `w` is mapped to Alt-Right, and so on.  
 This approach is inspired by the [Karabiner-Elements Vim Mode Plus mod](https://ke-complex-modifications.pqrs.org/#vim_mode_plus).
 
 Demo Video:
@@ -47,29 +47,29 @@ There are two options on how to integrate this config into your setup:
 
 ### Standalone mode (Recommended)
 
-If you are running on Linux, I'd always recommend this approach.
+If you are running on Linux, I'd always recommend this approach.  
 On other OSes, this will only work if you have no custom kanata setup.
 
-The idea is to have a dedicated kanata instance running that is solely responsible for handling the Vim modes.
+The idea is to have a dedicated kanata instance running that is solely responsible for handling the Vim modes.  
 This kanata instance can be applied to external keyboards (e.g. running on ZMK), but also on top of other kanata instances (Linux only?!).
 
 Simply run a dedicated kanata process with a config similar to the one in [`vim-standalone.kbd`](./examples/vim-standalone.kbd).
 
 To run a kanata on top of another kanata instance, I've found these two ways, which only seem to be supported on Linux:
 
-  1. Via the keyboard name
-    - use `(defcfg linux-output-device-name "my-kanata-instance")` on the first instance to set a unique name
-    - use `(defcfg linux-dev-names-include ("my-kanata-instance"))` on the kanata Vim instance to apply on top of the first kanata instance
-  2. Via the keyboard path
-    - use `kanata --symlink-path /some/path/my-kanata-instance` to start first instance
+  1. Via the keyboard name  
+    - use `(defcfg linux-output-device-name "my-kanata-instance")` on the first instance to set a unique name  
+    - use `(defcfg linux-dev-names-include ("my-kanata-instance"))` on the kanata Vim instance to apply on top of the first kanata instance  
+  2. Via the keyboard path  
+    - use `kanata --symlink-path /some/path/my-kanata-instance` to start first instance  
     - use `(defcfg linux-dev /some/path/my-kanata-instance)` on the kanata Vim instance to apply on top of the first kanata instance
 
-Running a dedicated kanata instance allows to fully decouple the setup of the Vim config from any custom keymaps.
+Running a dedicated kanata instance allows to fully decouple the setup of the Vim config from any custom keymaps.  
 So all custom keymap quirks such as homerow mods will simply work out of the box when in Vim mode.
 
 ### Plugin setup
 
-This approach injects the Vim config into an existing kanata setup.
+This approach injects the Vim config into an existing kanata setup.  
 It usually requires a bit more effort to make sure all keybindings work correctly.
 
 Include the vim plugin files in this **strict order at the top** of your keymap.
@@ -122,7 +122,7 @@ Example empty scaffolding:
 
 ### Map a Vim entrypoint
 
-In the examples below, the vim entrypoint is mapped to `esc`.
+In the examples below, the vim entrypoint is mapped to `esc`.  
 But of course you can map it to any key instead of `esc`, such as `caps` etc.
 
 #### Simple setup
@@ -145,9 +145,9 @@ Or get creative in how to enter vim mode. E.g. by double tap on escape:
 
 #### Application-aware setup
 
-It can be very nice to have a different vim mode trigger depending on the currently used app.
-E.g. in the terminal I need my `escape` key to behave normally (for actual vim use).
-But in my browser, I want the `escape` key to toggle the vim mode immediately.
+It can be very nice to have a different vim mode trigger depending on the currently used app.  
+E.g. in the terminal I need my `escape` key to behave normally (for actual vim use).  
+But in my browser, I want the `escape` key to toggle the vim mode immediately.  
 You can use the `vim-entrypoint` template for such a setup:
 
 ```kbd
@@ -162,17 +162,17 @@ Behavior:
 - hold `right shift` + tap `esc`: enter `vim-normal`
 - if virtual key `vim-direct-enter` is active, always enters `vim-normal` on tap `esc`
 
-This only makes sense in conjunction with an external script that toggles the `vim-direct-enter` virtual key based on the active app.
+This only makes sense in conjunction with an external script that toggles the `vim-direct-enter` virtual key based on the active app.  
 For an example script that works with Hyprland on Linux, refer to [`hypr-window-listener.lua`](`./examples/hypr-window-listener.lua`) or [`hypr-window-listener.sh`](./examples/hypr-window-listener.sh).
 
 ### Leverage the override layers to tailor to a custom keymap
 
-The plugin implementations of the vim layers assume the default vim mappings.
-E.g. in normal mode layer, the "j" key is mapped to the down arrow key.
-If you're using homerow mods, you most likely want to map a long tap of "j" to the shift key.
-Or maybe you're using `caps` as `escape` key and want to use it to exit normal mode.
+The plugin implementations of the vim layers assume the default vim mappings.  
+E.g. in normal mode layer, the "j" key is mapped to the down arrow key.  
+If you're using homerow mods, you most likely want to map a long tap of "j" to the shift key.  
+Or maybe you're using `caps` as `escape` key and want to use it to exit normal mode.  
 
-This can easily be achieved by using the override layers without touching the Vim layer implementation.
+This can easily be achieved by using the override layers without touching the Vim layer implementation.  
 Here are some simple examples (same principle applies to all override layers):
 
 ```kbd
@@ -239,10 +239,9 @@ Here are some simple examples (same principle applies to all override layers):
 
 ## Visualize active vim mode
 
-It can be very confusing to use this plugin without a way to see which vim mode is currently active.
-Luckily the kanata TCP port allows to build simple integrations with external tools.
-For example, refer to [`quickshell-kanata-vim-status`](`./examples/quickshell-kanata-vim-status.qml`) [`waybar-kanata-vim-status.sh`](./examples/waybar-kanata-vim-status.sh) for a simple integration with Linux Quickshell or Waybar.
-Or th
+It can be very confusing to use this plugin without a way to see which vim mode is currently active.  
+Luckily the kanata TCP port allows to build simple integrations with external tools.  
+For example, refer to [`quickshell-kanata-vim-status`](`./examples/quickshell-kanata-vim-status.qml`) [`waybar-kanata-vim-status.sh`](./examples/waybar-kanata-vim-status.sh) for a simple integration with Linux Quickshell or Waybar.  
 
 (A more simple approach is to activate `CAPS` mode while vim layers are active - this shows a small caps-indicator on some OSes.)
 
