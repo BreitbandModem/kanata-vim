@@ -65,6 +65,8 @@
   ;; reselect line for first motion after entering visual line mode
   j     (t! down (input-history real v 4) @select-line-below)
   k     (t! up   (input-history real v 4) @select-line-above)
+  .     tab     ;; tap > (shift always pressed already?) -> move indentation right
+  ,     S-tab   ;; tap < (shift always pressed already?) -> move indentation left
 
   ;; deactivate any other key presses
   ___   XX

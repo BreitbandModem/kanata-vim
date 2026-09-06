@@ -127,8 +127,15 @@
   u     (t! action-ctl
           @undo                                   ;;      tap (u)
           @half-page-up)                          ;; Ctrl tap (C-u)
-  .     rpt-any                                   ;; repeat last action - only works for a few bindings
   del   @delete
+  .     (t! action-shift
+          rpt-any                                 ;; repeat last action - only works for a few bindings
+          (macro @select-right (unshift tab) @deselect) ;; shift tap (>) -> move indentation right
+        )
+  ,     (t! action-shift
+          XX
+          (macro @select-right tab @deselect)     ;; shift tap (<) -> move indentation left
+        )
 
   ;; loop modifiers to the vim layer
   rctl  rctl
